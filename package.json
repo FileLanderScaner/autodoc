@@ -5,13 +5,22 @@
   "version": "1.0.0",
   "publisher": "tuusuario", 
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.80.0"
   },
-  "categories": ["Other"],
-  "activationEvents": [
-  "onCommand:autodoc-lite.generateComment"
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/FileLanderScaner/autodoc"
+},
+"json.schemas": [
+  {
+    "fileMatch": ["package.json"],
+    "url": "./.vscode/schemas/package.json"
+  }
 ],
 
+
+  "categories": ["Other"],
+  "activationEvents": ["onCommand:autodoc-lite.generateComment"],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
