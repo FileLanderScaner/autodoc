@@ -3,24 +3,20 @@
   "displayName": "AutoDoc Lite",
   "description": "Genera comentarios automáticos para tu código con un clic. ¡Olvídate de escribirlos a mano!",
   "version": "1.0.0",
-  "publisher": "tuusuario", 
+  "publisher": "autodoc-lite",
   "engines": {
-    "vscode": "^1.80.0"
+    "vscode": "^1.1.36"
   },
   "repository": {
-  "type": "git",
-  "url": "https://github.com/FileLanderScaner/autodoc"
-},
-"json.schemas": [
-  {
-    "fileMatch": ["package.json"],
-    "url": "./.vscode/schemas/package.json"
-  }
-],
-
-
-  "categories": ["Other"],
-  "activationEvents": ["onCommand:autodoc-lite.generateComment"],
+    "type": "git",
+    "url": "https://github.com/FileLanderScaner/autodoc.git"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:autodoc-lite.generateComment"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -40,8 +36,8 @@
     "compile": "tsc -watch -p ./"
   },
   "devDependencies": {
+    "@types/node": "^20.4.2",
     "typescript": "^5.2.2",
-    "vscode": "^1.85.0",
-    "@types/node": "^20.4.2"
+    "vscode": "^1.1.36"
   }
 }
