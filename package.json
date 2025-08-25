@@ -1,39 +1,83 @@
 {
   "name": "autodoc-lite",
   "displayName": "AutoDoc Lite",
-  "description": "Genera comentarios automáticos para tu código con un clic. ¡Olvídate de escribirlos a mano!",
-  "version": "1.0.0",
+  "description": "Genera comentarios automáticos e inteligentes para tu código (JS, TS, Python, Java, C#) con vista previa y plantillas personalizables.",
+  "version": "2.0.0",
   "publisher": "autodoc-lite",
   "engines": {
-    "vscode": "^1.80.0"
+    "vscode": "^1.85.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/FileLanderScaner/autodoc.git"
   },
-  "categories": ["Other"],
-  "activationEvents": ["onCommand:autodoc-lite.generateComment"],
+  "categories": [
+    "Snippets",
+    "Programming Languages"
+  ],
+  "icon": "images/icon.png",
+  "activationEvents": [
+    "onCommand:autodoc-lite.generateComment",
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:python",
+    "onLanguage:java",
+    "onLanguage:csharp"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "autodoc-lite.generateComment",
-        "title": "AutoDoc Lite: Generar comentario"
+        "title": "AutoDoc-Lite: Generar comentario de función"
       }
-    ]
+    ],
+    "keybindings": [
+      {
+        "command": "autodoc-lite.generateComment",
+        "key": "ctrl+alt+d",
+        "mac": "cmd+alt+d",
+        "when": "editorTextFocus"
+      }
+    ],
+    "configuration": {
+      "title": "AutoDoc-Lite Configuration",
+      "properties": {
+        "autodoc-lite.commentStyle": {
+          "type": "string",
+          "enum": [
+            "JSDoc",
+            "DocString",
+            "Simple"
+          ],
+          "default": "JSDoc",
+          "description": "Estilo del comentario a generar."
+        },
+        "autodoc-lite.detailLevel": {
+          "type": "string",
+          "enum": [
+            "Resumen",
+            "Detallado"
+          ],
+          "default": "Resumen",
+          "description": "Nivel de detalle del comentario generado."
+        },
+        "autodoc-lite.customTemplate": {
+          "type": "string",
+          "default": "",
+          "description": "Plantilla personalizada para el comentario. Usa ${code} para insertar el código."
+        }
+      }
+    }
   },
-  "galleryBanner": {
-    "color": "#1E1E1E",
-    "theme": "dark"
-  },
-  "icon": "images/icon.png",
   "scripts": {
-    "vscode:prepublish": "tsc -p ./",
-    "compile": "tsc -watch -p ./"
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "typescript": "^5.2.2",
-    "vscode": "^1.85.0",
-    "@types/node": "^20.4.2"
+    "@types/vscode": "^1.85.0",
+    "@types/node": "20.x",
+    "typescript": "^5.3.3"
   }
 }

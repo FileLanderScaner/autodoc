@@ -3,39 +3,72 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = activate;
 exports.deactivate = deactivate;
 const vscode = require("vscode");
+// Activa la extensión
 function activate(context) {
-    console.log("AutoDoc Lite activo");
-    let disposable = vscode.commands.registerCommand("autodoc-lite.generateComment", async () => {
+    const command = 'autodoc-lite.generateComment';
+    const commandHandler = async () => {
         const editor = vscode.window.activeTextEditor;
-        if (!editor)
-            return;
-        const selection = editor.selection;
-        const code = editor.document.getText(selection);
-        if (!code) {
-            vscode.window.showErrorMessage("Selecciona un bloque de código primero");
+        if (!editor) {
+            vscode.window.showErrorMessage('No hay un editor de texto activo.');
             return;
         }
-        const comment = generateFakeComment(code);
-        editor.edit(editBuilder => {
-            editBuilder.insert(selection.start, comment + "\n");
-        });
-        vscode.window.showInformationMessage("Comentario agregado 🚀");
-    });
-    context.subscriptions.push(disposable);
+        const languageId = editor.document.languageId;
+        const commentPrefix = getCommentPrefix(languageId);
+        if (!commentPrefix) {
+            vscode.window.showErrorMessage(`El lenguaje '${languageId}' no es compatible con AutoDoc-Lite.`);
+            return;
+        }
+        const functionBlock = findFunctionBlock(editor);
+        if (!functionBlock) {
+            vscode.window.showErrorMessage('No se pudo encontrar una función o método en la posición actual del cursor.');
+            return;
+        }
+        const comment = `${commentPrefix} TODO: Explica esta función y sus parámetros`;
+        // Vista previa del comentario
+        const userChoice = await vscode.window.showInformationMessage(`Se insertará el siguiente comentario:\n\n${comment}`, { modal: true }, 'Aceptar');
+        if (userChoice === 'Aceptar') {
+            editor.edit(editBuilder => {
+                editBuilder.insert(functionBlock.start, comment + '\n');
+            });
+            vscode.window.showInformationMessage('Comentario agregado con éxito. 🚀');
+        }
+    };
+    context.subscriptions.push(vscode.commands.registerCommand(command, commandHandler));
 }
+// Desactiva la extensión
 function deactivate() { }
-function generateFakeComment(codeBlock) {
-    const templates = [
-        "Este bloque inicializa variables importantes",
-        "Función que procesa datos de entrada y retorna resultado",
-        "Loop principal que recorre todos los elementos",
-        "Aquí se realizan operaciones críticas",
-        "Bloque de código que maneja errores",
-        "Lógica principal de la función",
-        "Preparación de datos antes de la ejecución",
-        "Validación de parámetros de entrada"
-    ];
-    const comment = templates[Math.floor(Math.random() * templates.length)];
-    return "// " + comment;
+/**
+ * Obtiene el prefijo de comentario basado en el ID del lenguaje.
+ * @param languageId El ID del lenguaje del editor activo.
+ * @returns El prefijo de comentario ('//' o '#') o null si no es compatible.
+ */
+function getCommentPrefix(languageId) {
+    const supportedLanguages = {
+        'javascript': '//',
+        'typescript': '//',
+        'javascriptreact': '//',
+        'typescriptreact': '//',
+        'java': '//',
+        'csharp': '//',
+        'python': '#',
+    };
+    return supportedLanguages[languageId] || null;
+}
+/**
+ * Encuentra el bloque de función o método más cercano a la posición del cursor.
+ * Por ahora, simplemente devuelve la línea actual como un rango.
+ * TODO: Implementar una lógica más robusta para detectar el bloque completo.
+ * @param editor El editor de texto activo.
+ * @returns Un rango que representa el bloque de la función.
+ */
+function findFunctionBlock(editor) {
+    const position = editor.selection.active;
+    const line = editor.document.lineAt(position.line);
+    // Implementación simplificada: usa la línea actual.
+    // Una implementación real buscaría hacia arriba y abajo para encontrar `{` y `}` o indentación.
+    if (!line.isEmptyOrWhitespace) {
+        return line.range;
+    }
+    return null;
 }
 //# sourceMappingURL=extension.js.map
