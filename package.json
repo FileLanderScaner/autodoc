@@ -5,18 +5,14 @@
   "version": "1.0.0",
   "publisher": "autodoc-lite",
   "engines": {
-    "vscode": "^1.1.36"
+    "vscode": "^1.80.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/FileLanderScaner/autodoc.git"
   },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:autodoc-lite.generateComment"
-  ],
+  "categories": ["Other"],
+  "activationEvents": ["onCommand:autodoc-lite.generateComment"],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -36,8 +32,8 @@
     "compile": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@types/node": "^20.4.2",
     "typescript": "^5.2.2",
-    "vscode": "^1.1.36"
+    "vscode": "^1.85.0",
+    "@types/node": "^20.4.2"
   }
 }
